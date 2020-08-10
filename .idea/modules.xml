@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-engineering.iml" filepath="$PROJECT_DIR$/data-engineering.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-layer/data-layer.iml" filepath="$PROJECT_DIR$/data-layer/data-layer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/functional-models-layer/functional-models-layer.iml" filepath="$PROJECT_DIR$/functional-models-layer/functional-models-layer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models-layer/models-layer.iml" filepath="$PROJECT_DIR$/models-layer/models-layer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pipeline/pipeline.iml" filepath="$PROJECT_DIR$/pipeline/pipeline.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualizations-layer/visualizations-layer.iml" filepath="$PROJECT_DIR$/visualizations-layer/visualizations-layer.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="pipeline" />
+        <module name="data-layer" />
+        <module name="visualizations-layer" />
+        <module name="common" />
+        <module name="models-layer" />
+        <module name="functional-models-layer" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="1.8" />
+      <module name="data-engineering" target="1.8" />
+      <module name="data-layer" target="1.8" />
+      <module name="functional-models-layer" target="1.8" />
+      <module name="models-layer" target="1.8" />
+      <module name="pipeline" target="1.8" />
+      <module name="visualizations-layer" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
