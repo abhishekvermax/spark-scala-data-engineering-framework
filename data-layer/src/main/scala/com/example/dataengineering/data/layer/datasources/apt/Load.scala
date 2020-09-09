@@ -15,7 +15,7 @@ class Load[T<: LoaderSchema: Encoder](val spark: SparkSession,
                                       val databaseName: String,val tableName:String)
     extends Loader[T] {
 
-  val aptOracleInstance: Oracle[T] = new Oracle[T](spark,
+  val sampleOracleInstance: Oracle[T] = new Oracle[T](spark,
                                              host,
                                              port,
                                              userName,
@@ -24,6 +24,6 @@ class Load[T<: LoaderSchema: Encoder](val spark: SparkSession,
                                              databaseName,tableName)
 
   override def Load: Dataset[T] = {
-    aptOracleInstance.provideData.as[T]
+    sampleOracleInstance.provideData.as[T]
   }
 }
