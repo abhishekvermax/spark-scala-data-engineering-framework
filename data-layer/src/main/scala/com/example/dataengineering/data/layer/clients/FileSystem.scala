@@ -8,10 +8,16 @@ import scala.reflect.runtime.{universe => runTimeUniverse}
 // present, will not compile if not present.
 import oracle.jdbc.OracleDriver
 
-class FileSystem[T<: LoaderSchema: Encoder](val inputPath: String, val spark: SparkSession)
+class FileSystem[T <: LoaderSchema: Encoder](val inputPath: String,
+                                             val spark: SparkSession,
+                                             val saveMode: String,
+                                             val tableName: String)
     extends DataProvider[T] {
 
   override def provideData: Dataset[T] = {
     spark.read.parquet(inputPath).as[T]
   }
+
+  override def sparkWareHouseMetadata(): Unit =
+    provideData.write.mode("append").saveAsTable(tableName)
 }
