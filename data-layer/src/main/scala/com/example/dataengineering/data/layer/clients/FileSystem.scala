@@ -13,13 +13,34 @@ class FileSystem[T <: LoaderSchema: Encoder](val inputPath: String,
 
   override def provideData(metadata: Boolean,
                            outputPath: String): Dataset[T] = {
-    lazy val providedDataDS: Dataset[T] =
-      spark.read.parquet(inputPath).as[T].cache()
-    writeParquet(providedDataDS, outputPath + "/" + tableName)
-    if (metadata) {
-      providedDataDS.write.mode("append").saveAsTable(tableName)
-      providedDataDS
-    } else providedDataDS
+    tableName match {
+      case "all" =>
+        lazy val providedDataDS: Dataset[T] =
+          spark.read.parquet(inputPath).as[T].cache()
+        if (metadata) {
+          writeParquet(providedDataDS, outputPath + "/")
+          providedDataDS.write
+            .mode("append")
+            .saveAsTable(inputPath.split("/").last)
+          providedDataDS
+        } else {
+          writeParquet(providedDataDS, outputPath + "/")
+          providedDataDS
+        }
+
+      case _ =>
+        lazy val providedDataDS: Dataset[T] =
+          spark.read.parquet(inputPath + "/" + tableName).as[T].cache()
+        if (metadata) {
+          writeParquet(providedDataDS, outputPath + "/")
+          providedDataDS.write.mode("append").saveAsTable(tableName)
+          providedDataDS
+        } else {
+          writeParquet(providedDataDS, outputPath + "/")
+          spark.read.parquet(inputPath + "/" + tableName).as[T].cache()
+        }
+    }
+
   }
 
 }

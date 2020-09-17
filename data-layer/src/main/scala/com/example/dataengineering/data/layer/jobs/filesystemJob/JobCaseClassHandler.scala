@@ -20,7 +20,7 @@ trait JobCaseClassHandler {
                                      inputPath,
                                      spark,
                                      saveMode,
-                                     outputPath,
+                                     outputPath + tableName,
                                      metadata)(Encoders.product[Users]).Load
 
     lazy val userData =
@@ -28,26 +28,26 @@ trait JobCaseClassHandler {
                          inputPath,
                          spark,
                          saveMode,
-                         outputPath,
+                         outputPath + tableName,
                          metadata)(Encoders.product[UserData]).Load
 
     tableName match {
-      case "Users" => users
+      case "users" => users
 
-      case "UserData" => userData
+      case "userdata" => userData
 
-      case "All" =>
+      case "all" =>
         (new Load[Users](tableName,
-                         inputPath + "users",
+                         inputPath + "/users",
                          spark,
                          saveMode,
-                         outputPath,
+                         outputPath + "users",
                          metadata)(Encoders.product[Users]).Load,
          new Load[UserData](tableName,
                             inputPath + "userdata",
                             spark,
                             saveMode,
-                            outputPath,
+                            outputPath + "userdata",
                             metadata)(Encoders.product[UserData]).Load)
         spark.emptyDataFrame
 
