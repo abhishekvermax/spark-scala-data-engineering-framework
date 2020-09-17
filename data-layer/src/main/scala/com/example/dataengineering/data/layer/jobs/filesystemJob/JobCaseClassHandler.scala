@@ -16,25 +16,42 @@ trait JobCaseClassHandler {
           metadata: Boolean)
     : Dataset[_ >: Users with UserData with Row <: Serializable] = {
 
+    lazy val users = new Load[Users](tableName,
+                                     inputPath,
+                                     spark,
+                                     saveMode,
+                                     outputPath,
+                                     metadata)(Encoders.product[Users]).Load
+
+    lazy val userData =
+      new Load[UserData](tableName,
+                         inputPath,
+                         spark,
+                         saveMode,
+                         outputPath,
+                         metadata)(Encoders.product[UserData]).Load
+
     tableName match {
-      case "Users" =>
-        new Load[Users](tableName,
-                        inputPath,
-                        spark,
-                        saveMode,
-                        outputPath,
-                        metadata)(Encoders.product[Users]).Load
+      case "Users" => users
 
-      case "UserData" =>
-        new Load[UserData](tableName,
-                           inputPath,
-                           spark,
-                           saveMode,
-                           outputPath,
-                           metadata)(Encoders.product[UserData]).Load
+      case "UserData" => userData
 
-      case _ =>
+      case "All" =>
+        (new Load[Users](tableName,
+                         inputPath + "users",
+                         spark,
+                         saveMode,
+                         outputPath,
+                         metadata)(Encoders.product[Users]).Load,
+         new Load[UserData](tableName,
+                            inputPath + "userdata",
+                            spark,
+                            saveMode,
+                            outputPath,
+                            metadata)(Encoders.product[UserData]).Load)
         spark.emptyDataFrame
+
+      case _ => spark.emptyDataFrame
     }
   }
 }

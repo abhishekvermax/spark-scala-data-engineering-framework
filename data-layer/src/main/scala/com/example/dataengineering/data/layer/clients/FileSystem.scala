@@ -13,7 +13,8 @@ class FileSystem[T <: LoaderSchema: Encoder](val inputPath: String,
 
   override def provideData(metadata: Boolean,
                            outputPath: String): Dataset[T] = {
-    val providedDataDS: Dataset[T] = spark.read.parquet(inputPath).as[T].cache()
+    lazy val providedDataDS: Dataset[T] =
+      spark.read.parquet(inputPath).as[T].cache()
     writeParquet(providedDataDS, outputPath + "/" + tableName)
     if (metadata) {
       providedDataDS.write.mode("append").saveAsTable(tableName)

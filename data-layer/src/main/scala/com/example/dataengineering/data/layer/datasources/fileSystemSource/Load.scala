@@ -18,4 +18,5 @@ class Load[T <: LoaderSchema: Encoder](val tableName: String,
 
   override def Load: Dataset[T] =
     fileSystemSourceInstance.provideData(metadata, outputPath).as[T]
+
 }
