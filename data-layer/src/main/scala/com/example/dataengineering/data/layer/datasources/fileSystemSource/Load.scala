@@ -5,10 +5,10 @@ import com.example.dataengineering.data.layer.datasources.Loader
 import com.example.dataengineering.data.layer.schemas.LoaderSchema
 import org.apache.spark.sql.{Dataset, Encoder, SparkSession}
 
-class Load[T <: LoaderSchema: Encoder](val inputPath: String,
+class Load[T <: LoaderSchema: Encoder](val tableName: String,
+                                       val inputPath: String,
                                        val spark: SparkSession,
                                        val saveMode: String,
-                                       val tableName: String,
                                        val outputPath: String,
                                        val metadata: Boolean)
     extends Loader[T] {

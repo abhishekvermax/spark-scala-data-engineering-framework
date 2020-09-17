@@ -10,12 +10,13 @@ class LoadSpec extends FunSpec with SparkSpec with GivenWhenThen with Matchers {
 
     it(
       "should check Parquet file column numbers and save table with metadata in spark-ware house folder") {
+
       val userDS = new Load[Users](
+        "Users",
         "/home/abhi/Documents/own_git/spark-scala-data-engineering-framework/data-layer/src/test/scala/com/" +
           "example/dataengineering/data/layer/datasources/fileSystemSource/resources/users",
         ss,
         "overwrite",
-        "Users",
         "/home/abhi/Desktop/testOutput/",
         true
       )(Encoders.product[Users])
@@ -27,11 +28,11 @@ class LoadSpec extends FunSpec with SparkSpec with GivenWhenThen with Matchers {
       "should check Parquet file column numbers and should not fail on table already present " +
         "if metadata boolean is set false") {
       val parquet1Test = new Load[Users](
+        "Users",
         "/home/abhi/Documents/own_git/spark-scala-data-engineering-framework/data-layer/src/test/scala/com/" +
           "example/dataengineering/data/layer/datasources/fileSystemSource/resources/users",
         ss,
         "overwrite",
-        "Users",
         "/home/abhi/Desktop/testOutput/",
         false
       )(Encoders.product[Users])
@@ -46,11 +47,11 @@ class LoadSpec extends FunSpec with SparkSpec with GivenWhenThen with Matchers {
     it(
       "should check Parquet file column numbers and save table with metadata in spark-ware house folder") {
       val userDataDS = new Load[UserData](
+        "UserData",
         "/home/abhi/Documents/own_git/spark-scala-data-engineering-framework/data-layer/src/test/scala/com/" +
           "example/dataengineering/data/layer/datasources/fileSystemSource/resources/userdata",
         ss,
         "overwrite",
-        "UserData",
         "/home/abhi/Desktop/testOutput/",
         true
       )(Encoders.product[UserData])
@@ -62,11 +63,11 @@ class LoadSpec extends FunSpec with SparkSpec with GivenWhenThen with Matchers {
       "should check Parquet file column numbers and should not fail on table already present " +
         "if metadata boolean is set false") {
       val userDataDS = new Load[UserData](
+        "UserData",
         "/home/abhi/Documents/own_git/spark-scala-data-engineering-framework/data-layer/src/test/scala/com/" +
           "example/dataengineering/data/layer/datasources/fileSystemSource/resources/userdata",
         ss,
         "overwrite",
-        "UserData",
         "/home/abhi/Desktop/testOutput/",
         false
       )(Encoders.product[UserData])
