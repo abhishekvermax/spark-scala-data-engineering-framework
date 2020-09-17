@@ -13,7 +13,9 @@ class Load[T <: LoaderSchema: Encoder](val spark: SparkSession,
                                        val serviceName: String,
                                        val databaseName: String,
                                        val tableName: String,
-                                       val saveMode: String)
+                                       val saveMode: String,
+                                       val outputPath: String,
+                                       val metadata: Boolean)
     extends Loader[T] {
 
   val dbracleInstance: Oracle[T] = new Oracle[T](spark,
@@ -26,8 +28,6 @@ class Load[T <: LoaderSchema: Encoder](val spark: SparkSession,
                                                  tableName,
                                                  saveMode)
 
-  override def loadData: Dataset[T] = dbracleInstance.provideData.as[T]
-
-  override def loadSparkWareHouseMetaData(): Unit =
-    loadData.write.mode(saveMode).saveAsTable(tableName)
+  override def Load: Dataset[T] =
+    dbracleInstance.provideData(metadata, outputPath).as[T]
 }

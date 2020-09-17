@@ -8,15 +8,14 @@ import org.apache.spark.sql.{Dataset, Encoder, SparkSession}
 class Load[T <: LoaderSchema: Encoder](val inputPath: String,
                                        val spark: SparkSession,
                                        val saveMode: String,
-                                       val tableName: String)
+                                       val tableName: String,
+                                       val outputPath: String,
+                                       val metadata: Boolean)
     extends Loader[T] {
 
   val fileSystemSourceInstance: FileSystem[T] =
     new FileSystem[T](inputPath, spark, saveMode, tableName)
 
-  override def loadData: Dataset[T] = fileSystemSourceInstance.provideData.as[T]
-
-  override def loadSparkWareHouseMetaData(): Unit =
-    loadData.write.mode(saveMode).saveAsTable(tableName)
-
+  override def Load: Dataset[T] =
+    fileSystemSourceInstance.provideData(metadata, outputPath).as[T]
 }

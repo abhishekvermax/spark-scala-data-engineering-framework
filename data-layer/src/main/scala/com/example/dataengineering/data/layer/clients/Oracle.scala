@@ -1,12 +1,12 @@
 package com.example.dataengineering.data.layer.clients
 
+import com.example.dataengineering.data.layer.output.Writer
 import com.example.dataengineering.data.layer.schemas.LoaderSchema
 import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SparkSession}
 //Don't delete JDBC as this will verify ORACLE Connector is
 // present, will not compile if not present.
 import oracle.jdbc.OracleDriver
-import scala.reflect.runtime.{universe => runTimeUniverse}
-import scala.reflect.runtime.universe._
+
 class Oracle[T <: LoaderSchema: Encoder](val spark: SparkSession,
                                          val host: String,
                                          val port: Int,
@@ -16,11 +16,13 @@ class Oracle[T <: LoaderSchema: Encoder](val spark: SparkSession,
                                          val databaseName: String,
                                          val tableName: String,
                                          val saveMode: String)
-    extends DataProvider[T] {
+    extends DataProvider[T]
+    with Writer {
 
-  override def provideData: Dataset[T] = {
+  override def provideData(metadata: Boolean,
+                           outputPath: String): Dataset[T] = {
 
-    spark.read
+    val providedDataDS: Dataset[T] = spark.read
       .format("jdbc")
       .option(
         "url",
@@ -31,8 +33,13 @@ class Oracle[T <: LoaderSchema: Encoder](val spark: SparkSession,
       .option("driver", "oracle.jdbc.OracleDriver")
       .load()
       .as[T]
-  }
 
-  override def sparkWareHouseMetadata(): Unit =
-    provideData.write.mode(saveMode).saveAsTable(tableName)
+    writeParquet(providedDataDS, outputPath)
+
+    if (metadata) {
+      providedDataDS.write.mode("append").saveAsTable(tableName)
+      providedDataDS
+    } else providedDataDS
+
+  }
 }
